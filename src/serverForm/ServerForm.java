@@ -9,6 +9,8 @@ import java.util.Objects;
 
 public class ServerForm extends Frame {
     public static final ServerForm instance = new ServerForm();
+
+
     private Label hostLabel;
     private Label portLabel;
 
@@ -21,6 +23,7 @@ public class ServerForm extends Frame {
     private final WindowAdapter windowAdapterOpen = new WindowAdapter() {
         @Override
         public void windowClosing(WindowEvent evt) {
+            ServerFormListener.instance.addTextToTextArea("Cannot close app when the server is running. Stop server first");
         }
     };
 
@@ -134,7 +137,8 @@ public class ServerForm extends Frame {
     }
 
     public void startServer() {
-        if (isCorrectHost() && isCorrectPort())
+
+        if (ServerFormListener.instance.isCorrectHost() && ServerFormListener.instance.isCorrectPort())
         {
             getStopButton().setEnabled(true);
             getExitButton().setEnabled(false);
@@ -147,23 +151,7 @@ public class ServerForm extends Frame {
 
     }
 
-    public boolean isCorrectHost() {
-        if ((!Objects.equals(ServerForm.instance.getHostTextField().getText(), "")) &&
-                Objects.equals(ServerForm.instance.getHostTextField().getText(), "localhost")
-        ) {
-            return true;
-        }
-        return false;
-    }
 
-    public boolean isCorrectPort() {
-        if ((!Objects.equals(ServerForm.instance.getPortTextField().getText(), ""))) {
-            if( Integer.parseInt(ServerForm.instance.getPortTextField().getText())>0 &&
-            Integer.parseInt(ServerForm.instance.getPortTextField().getText())<65535)
-                return true;
-        }
-        return false;
-    }
 
 
 }

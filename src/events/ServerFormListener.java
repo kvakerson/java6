@@ -14,25 +14,50 @@ public class ServerFormListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if(e.getSource()== ServerForm.instance.getStartButton()){
             ServerForm.instance.startServer();
-            if(Objects.equals(ServerForm.instance.getTextAreaLogs().getText(), "")){
-                ServerForm.instance.getTextAreaLogs().append("Server has been started");
-            }
-            else ServerForm.instance.getTextAreaLogs().append("\nServer has been started");
+            if(ServerFormListener.instance.isCorrectHost() &&ServerFormListener.instance.isCorrectPort()) {
+                addTextToTextArea("Server has been started");
+            } else  addTextToTextArea("Server has not been started, because port or host is uncorrect");
+
         }
+        ////////////////////////
        if(e.getSource()==ServerForm.instance.getExitButton()){
            System.exit(0);
        }
+       //////////////////////
         if(e.getSource()==ServerForm.instance.getStopButton()){
             ServerForm.instance.stopServer();
-            if(Objects.equals(ServerForm.instance.getTextAreaLogs().getText(), "")){
-                ServerForm.instance.getTextAreaLogs().append("Server has been stopped");
+            if(ServerFormListener.instance.isCorrectHost() &&ServerFormListener.instance.isCorrectPort()) {
+                addTextToTextArea("Server has been stopped\"");
             }
-            else ServerForm.instance.getTextAreaLogs().append("\nServer has been stopped");
         }
         if(e.getSource()==ServerForm.instance.getExitButton()){
             System.exit(0);
         }
 
+    }
+
+    public boolean isCorrectHost() {
+        if ((!Objects.equals(ServerForm.instance.getHostTextField().getText(), "")) &&
+                Objects.equals(ServerForm.instance.getHostTextField().getText(), "localhost")
+        ) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isCorrectPort() {
+        if ((!Objects.equals(ServerForm.instance.getPortTextField().getText(), ""))) {
+            if( Integer.parseInt(ServerForm.instance.getPortTextField().getText())>0 &&
+                    Integer.parseInt(ServerForm.instance.getPortTextField().getText())<65535)
+                return true;
+        }
+        return false;
+    }
+
+    public void addTextToTextArea(String s){
+        if (Objects.equals(ServerForm.instance.getTextAreaLogs().getText(), "")) {
+            ServerForm.instance.getTextAreaLogs().append(s);
+        } else ServerForm.instance.getTextAreaLogs().append("\n"+s);
     }
 
 }
